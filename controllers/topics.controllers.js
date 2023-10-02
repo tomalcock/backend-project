@@ -7,6 +7,7 @@ function getTopics(req,res,next) {
         const topicsObj = {topics: response};
         res.status(200).send(topicsObj)
     })
+    .catch((err) => next(err))
 }
 
 module.exports = getTopics;
