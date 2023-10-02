@@ -3,7 +3,6 @@ const format = require('pg-format');
 
 
 function fetchArticleByID(article_id) {
-    console.log('you are in models')
     return db
     .query('SELECT * FROM articles WHERE article_id = $1',[article_id])
     .then((result) => {
