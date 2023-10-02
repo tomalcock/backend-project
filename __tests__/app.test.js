@@ -33,12 +33,27 @@ describe("GET /api/topics", () => {
         })
     })
 
-    test.only("returns 404 Not Found if path is not a route", () => {
+    test("returns 404 Not Found if path is not a route", () => {
         return request(app)
         .get('/api/topicssss')
         .expect(404)
         .then(({body}) => {
             expect(body.msg).toBe('path not found')
+        })
+    })
+})
+
+describe("GET /api", () => {
+    test('returns an object describing all the available endpoints on the API', () => {
+        return request(app)
+        .get('/api')
+        .expect(200)
+        .then((response) => {
+            console.log(response.body)
+            expect(typeof response.body).toBe('object')
+            expect(response.body.hasOwnProperty('GET /api')).toBe(true)
+            expect(response.body.hasOwnProperty('GET /api/topics')).toBe(true)
+            expect(response.body.hasOwnProperty('GET /api/articles')).toBe(true)
         })
     })
 })
