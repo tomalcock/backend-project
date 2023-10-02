@@ -10,14 +10,14 @@ app.get("/api/healthcheck", (req,res) => {
     res.status(200).send({message: "healthcheck complete"})
 })
 
-app.get("/api/topics", getTopics);
-
 app.get("/api", (req,res) => {
     readFile('./endpoints.json','utf8').then((file) => {
     const fileContentsObj = JSON.parse(file)
     res.status(200).send(fileContentsObj)
     })
 })
+
+app.get("/api/topics", getTopics);
 
 app.all('/*', (req,res) => {
     res.status(404).send({msg: "path not found"})
