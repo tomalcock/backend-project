@@ -3,6 +3,7 @@ const db = require("../db/connection.js");
 const testData = require('../db/data/test-data/index.js');
 const seed = require('../db/seeds/seed.js');
 const request = require('supertest');
+const endpointsJSON = require('../endpoints.json')
 
 beforeEach(() => {
     return seed(testData);
@@ -49,11 +50,7 @@ describe("GET /api", () => {
         .get('/api')
         .expect(200)
         .then((response) => {
-            console.log(response.body)
-            expect(typeof response.body).toBe('object')
-            expect(response.body.hasOwnProperty('GET /api')).toBe(true)
-            expect(response.body.hasOwnProperty('GET /api/topics')).toBe(true)
-            expect(response.body.hasOwnProperty('GET /api/articles')).toBe(true)
+            expect(response.body).toEqual(endpointsJSON);
         })
     })
 })
