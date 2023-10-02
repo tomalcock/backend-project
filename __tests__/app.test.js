@@ -19,12 +19,12 @@ describe("GET /api/healthcheck", () => {
   });
 
 describe("GET /api/topics", () => {
-    test("return array of topic objects with properties slug and description", () => {
+    test.only("return array of topic objects with properties slug and description", () => {
         return request(app)
         .get("/api/topics")
         .expect(200)
         .then((response) => {
-            const topics = response.body;
+            topics = response.body.topics
             expect(topics.length).toBe(3)
             topics.forEach((topic) => {
                 expect(topic.hasOwnProperty('slug')).toBe(true);
@@ -33,7 +33,7 @@ describe("GET /api/topics", () => {
         })
     })
 
-    test.only("returns 404 Not Found if path is not a route", () => {
+    test("returns 404 Not Found if path is not a route", () => {
         return request(app)
         .get('/api/topicssss')
         .expect(404)

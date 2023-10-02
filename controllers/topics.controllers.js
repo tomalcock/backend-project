@@ -1,9 +1,11 @@
+const topics = require('../db/data/test-data/topics.js');
 const fetchTopics = require('../models/topics.models.js');
 
 function getTopics(req,res,next) {
     fetchTopics()
-    .then((topics) => {
-        res.status(200).send(topics)
+    .then((response) => {
+        const topicsObj = {topics: response};
+        res.status(200).send(topicsObj)
     })
 }
 
