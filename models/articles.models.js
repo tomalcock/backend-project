@@ -16,11 +16,4 @@ function fetchArticleByID(article_id) {
     })
 }
 
-function fetchArticles() {
-    return db.query('SELECT * FROM topics')
-    .then((response) => {
-        return response.rows;
-    })
-}
-
-module.exports = {fetchArticleByID, fetchArticles};
+module.exports = fetchArticleByID;
