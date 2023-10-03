@@ -7,6 +7,8 @@ const {readFile} = require('fs/promises');
 const getTopics = require('./controllers/topics.controllers.js');
 const getArticleByID = require('./controllers/articles.controllers.js')
 
+const getComments = require('./controllers/comments.controllers.js')
+
 app.get("/api/healthcheck", (req,res) => {
     res.status(200).send({message: "healthcheck complete"})
 })
@@ -21,6 +23,8 @@ app.get("/api", (req,res) => {
 app.get("/api/topics", getTopics);
 
 app.get("/api/articles/:article_id", getArticleByID);
+
+app.get("/api/articles/:article_id/comments",getComments)
 
 app.all('/*', (req,res) => {
     res.status(404).send({msg: "path not found"})
