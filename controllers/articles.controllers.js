@@ -10,10 +10,16 @@ function getArticleByID(req,res,next){
     .catch(err => next(err));
 }
 
-function getArticles() {
+function getArticles(req,res,next) {
     console.log('in controllers')
-    fetchArticles();
+    fetchArticles()
+    .then((response) => {
+        const articlesObj = {articles: response};
+        res.status(200).send(articlesObj)
+    })
+    .catch((err) => next(err))
 }
+
 
 
 module.exports = {getArticleByID, getArticles};

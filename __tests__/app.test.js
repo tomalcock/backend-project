@@ -90,24 +90,48 @@ describe("GET /api/articles/:article_id", () => {
     });
 })
 
-xdescribe("GET /api/articles", () => {
-    test("return array of articles, with the correct properties", () => {
+describe("GET /api/articles", () => {
+    test("return array of articles, with the correct properties AND no property body", () => {
         return request(app)
         .get("/api/articles")
         .expect(200)
         .then((response) => {
             articles = response.body.articles
-            expect(articles.length).toBe(13)
-            topics.forEach((topic) => {
-                expect(topic.hasOwnProperty('author')).toBe(true);
-                expect(topic.hasOwnProperty('title')).toBe(true);
-                expect(topic.hasOwnProperty('article_id')).toBe(true);
-                expect(topic.hasOwnProperty('topic')).toBe(true);
-                expect(topic.hasOwnProperty('created_at')).toBe(true);
-                expect(topic.hasOwnProperty('votes')).toBe(true);
-                expect(topic.hasOwnProperty('article_img_url')).toBe(true);
-                expect(topic.hasOwnProperty('comment_count')).toBe(true);
+            expect(articles.length).toBe(5)
+            articles.forEach((article) => {
+                expect(article.hasOwnProperty('author')).toBe(true);
+                expect(article.hasOwnProperty('title')).toBe(true);
+                expect(article.hasOwnProperty('article_id')).toBe(true);
+                expect(article.hasOwnProperty('topic')).toBe(true);
+                expect(article.hasOwnProperty('created_at')).toBe(true);
+                expect(article.hasOwnProperty('votes')).toBe(true);
+                expect(article.hasOwnProperty('article_img_url')).toBe(true);
+                expect(article.hasOwnProperty('comment_count')).toBe(true);
+                expect(article.hasOwnProperty('body')).toBe(false);
             })
+        })
+    })
+
+    test("returns the articles in descending order", () => {
+        return request(app)
+        .get("/api/articles")
+        .then((response) => {
+            articles = response.body.articles
+            console.log(articles)
+            expect(articles[4].created_at).toBe('2020-06-06T09:10:00.000Z');
+            expect(articles[3].created_at).toBe('2020-07-09T20:11:00.000Z');
+            expect(articles[2].created_at).toBe('2020-08-03T13:14:00.000Z');
+            expect(articles[1].created_at).toBe('2020-10-18T01:00:00.000Z');
+            expect(articles[0].created_at).toBe('2020-11-03T09:12:00.000Z');
+        })
+    })
+
+    test("returns 404 Not Found if path is not a route", () => {
+        return request(app)
+        .get('/api/articlessss')
+        .expect(404)
+        .then(({body}) => {
+            expect(body.msg).toBe('path not found')
         })
     })
 })
