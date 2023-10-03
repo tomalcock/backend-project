@@ -1,7 +1,6 @@
 const insertComment = require('../models/comments.models.js');
 
 function postComment(req,res,next) {
-    console.log('you are in controllers')
     const newComment = req.body
     const article_id = req.params.article_id;
     insertComment(newComment,article_id)
