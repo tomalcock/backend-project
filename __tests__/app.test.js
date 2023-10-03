@@ -90,3 +90,25 @@ describe("GET /api/articles/:article_id", () => {
     });
 })
 
+xdescribe("GET /api/articles", () => {
+    test("return array of articles, with the correct properties", () => {
+        return request(app)
+        .get("/api/articles")
+        .expect(200)
+        .then((response) => {
+            articles = response.body.articles
+            expect(articles.length).toBe(13)
+            topics.forEach((topic) => {
+                expect(topic.hasOwnProperty('author')).toBe(true);
+                expect(topic.hasOwnProperty('title')).toBe(true);
+                expect(topic.hasOwnProperty('article_id')).toBe(true);
+                expect(topic.hasOwnProperty('topic')).toBe(true);
+                expect(topic.hasOwnProperty('created_at')).toBe(true);
+                expect(topic.hasOwnProperty('votes')).toBe(true);
+                expect(topic.hasOwnProperty('article_img_url')).toBe(true);
+                expect(topic.hasOwnProperty('comment_count')).toBe(true);
+            })
+        })
+    })
+})
+

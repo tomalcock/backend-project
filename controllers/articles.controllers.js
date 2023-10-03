@@ -1,4 +1,4 @@
-const fetchArticleByID = require('../models/articles.models.js');
+const {fetchArticleByID,fetchArticles} = require('../models/articles.models.js');
 
 
 function getArticleByID(req,res,next){
@@ -10,5 +10,10 @@ function getArticleByID(req,res,next){
     .catch(err => next(err));
 }
 
+function getArticles() {
+    console.log('in controllers')
+    fetchArticles();
+}
 
-module.exports = getArticleByID;
+
+module.exports = {getArticleByID, getArticles};

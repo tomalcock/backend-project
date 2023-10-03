@@ -16,4 +16,8 @@ function fetchArticleByID(article_id) {
     })
 }
 
-module.exports = fetchArticleByID;
+function fetchArticles() {
+    console.log('in models')
+}
+
+module.exports = {fetchArticleByID, fetchArticles};
