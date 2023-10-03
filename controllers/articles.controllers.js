@@ -11,7 +11,6 @@ function getArticleByID(req,res,next){
 }
 
 function getArticles(req,res,next) {
-    console.log('in controllers')
     fetchArticles()
     .then((response) => {
         const articlesObj = {articles: response};

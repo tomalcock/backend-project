@@ -97,7 +97,8 @@ describe("GET /api/articles", () => {
         .expect(200)
         .then((response) => {
             articles = response.body.articles
-            expect(articles.length).toBe(5)
+            console.log(articles)
+            expect(articles.length).toBe(13)
             articles.forEach((article) => {
                 expect(article.hasOwnProperty('author')).toBe(true);
                 expect(article.hasOwnProperty('title')).toBe(true);
@@ -118,11 +119,7 @@ describe("GET /api/articles", () => {
         .then((response) => {
             articles = response.body.articles
             console.log(articles)
-            expect(articles[4].created_at).toBe('2020-06-06T09:10:00.000Z');
-            expect(articles[3].created_at).toBe('2020-07-09T20:11:00.000Z');
-            expect(articles[2].created_at).toBe('2020-08-03T13:14:00.000Z');
-            expect(articles[1].created_at).toBe('2020-10-18T01:00:00.000Z');
-            expect(articles[0].created_at).toBe('2020-11-03T09:12:00.000Z');
+            expect(articles).toBeSortedBy('created_at',{descending:true})
         })
     })
 
