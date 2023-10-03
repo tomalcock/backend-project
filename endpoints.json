@@ -50,7 +50,7 @@
         }
       ]
     }
-  }
+  },
   
   "GET /api/articles/:article_id": {
     "description": "serves an object with the requested article",
