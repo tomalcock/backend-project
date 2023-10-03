@@ -3,7 +3,8 @@ const db = require("../db/connection.js");
 const testData = require('../db/data/test-data/index.js');
 const seed = require('../db/seeds/seed.js');
 const request = require('supertest');
-const endpointsJSON = require('../endpoints.json')
+const endpointsJSON = require('../endpoints.json');
+const articles = require('../db/data/test-data/articles.js');
 
 beforeEach(() => {
     return seed(testData);
@@ -96,8 +97,7 @@ describe("GET /api/articles", () => {
         .get("/api/articles")
         .expect(200)
         .then((response) => {
-            articles = response.body.articles
-            console.log(articles)
+            const articles = response.body.articles
             expect(articles.length).toBe(13)
             articles.forEach((article) => {
                 expect(article.hasOwnProperty('author')).toBe(true);
@@ -110,6 +110,15 @@ describe("GET /api/articles", () => {
                 expect(article.hasOwnProperty('comment_count')).toBe(true);
                 expect(article.hasOwnProperty('body')).toBe(false);
             })
+            expect(articles[0]['article_id']).toBe(3);
+            expect(articles[0]['author']).toBe('icellusedkars');
+            expect(articles[0]['title']).toBe('Eight pug gifs that remind me of mitch');
+            expect(articles[0]['topic']).toBe('mitch');
+            expect(articles[0]['created_at']).toBe('2020-11-03T09:12:00.000Z');
+            expect(articles[0]['votes']).toBe(0);
+            expect(articles[0]['article_img_url']).toBe('https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700');
+            expect(articles[0]['comment_count']).toBe('2');
+            
         })
     })
 
@@ -117,8 +126,7 @@ describe("GET /api/articles", () => {
         return request(app)
         .get("/api/articles")
         .then((response) => {
-            articles = response.body.articles
-            console.log(articles)
+            const articles = response.body.articles
             expect(articles).toBeSortedBy('created_at',{descending:true})
         })
     })
