@@ -6,6 +6,9 @@ const {readFile} = require('fs/promises');
 
 const getTopics = require('./controllers/topics.controllers.js');
 const {getArticleByID,getArticles} = require('./controllers/articles.controllers.js')
+const postComment = require('./controllers/comments.controllers.js');
+
+app.use(express.json());
 
 app.get("/api/healthcheck", (req,res) => {
     res.status(200).send({message: "healthcheck complete"})
@@ -24,12 +27,17 @@ app.get("/api/articles/:article_id", getArticleByID);
 
 app.get("/api/articles", getArticles);
 
+app.post("/api/articles/:article_id/comments", postComment)
+
 app.all('/*', (req,res) => {
     res.status(404).send({msg: "path not found"})
 })
 
 app.use((err,req,res,next) => {
-    if(err.code === '22P02') {
+    if(err.status && err.msg) {
+        res.status(err.status).send({msg: err.msg})
+    }
+    if(err.code === '22P02'|'23503') {
         res.status(400).send({msg: 'Bad Request'})
     }
     res.status(err.status).send({msg: err.msg})

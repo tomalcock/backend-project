@@ -141,3 +141,51 @@ describe("GET /api/articles", () => {
     })
 })
 
+describe("POST /api/articles/:article_id/comments", () => {
+    test('inserts a new comment to the db and sends back the new comment', () => {
+        const newComment = {
+            username: 'butter_bridge',
+            body: "this is a test"
+        }
+        return request(app)
+        .post('/api/articles/3/comments')
+        .send(newComment)
+        .expect(201)
+        .then((response) => {
+            const newComm = response.body.comment
+            console.log(newComm)
+            expect(newComm.author).toBe('butter_bridge');
+            expect(newComm.body).toBe('this is a test');
+        })
+    })
+
+    test('responds with a 400 code and error message when provided with a bad article_id (no article with specified id)', () => {
+        const newComment = {
+            username: 'butter_bridge',
+            body: "this is a test"
+        }
+        return request(app)
+          .post('/api/articles/999/comments')
+          .send(newComment)
+          .expect(400)
+          .then((response) => {
+            expect(response.body.msg).toBe('Bad Request');
+          });
+      });
+
+      test('responds with a 400 code and error message when provided with an incorrect body', () => {
+        const newComment = {
+            user: 'butter_bridge',
+            bodyyyy: "this is a test"
+        }
+        return request(app)
+          .post('/api/articles/3/comments')
+          .send(newComment)
+          .expect(400)
+          .then((response) => {
+            expect(response.body.msg).toBe('Bad Request');
+          });
+      });
+})
+
+
