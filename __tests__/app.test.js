@@ -91,6 +91,49 @@ describe("GET /api/articles/:article_id", () => {
     });
 })
 
+describe("GET /api/articles/:article_id/comments", () => {
+    test('returns array of comments for the queried article id with correct properties AND created_at in descending order', () => {
+        return request(app)
+        .get('/api/articles/3/comments')
+        .expect(200)
+        .then((response) => {
+            const comments = response.body.comments;
+            expect(comments[1]['comment_id']).toBe(10);
+            expect(comments[1]['body']).toBe('git push origin master');
+            expect(comments[1]['article_id']).toBe(3);
+            expect(comments[1]['author']).toBe('icellusedkars');
+            expect(comments[1]['votes']).toBe(0);
+            expect(comments[1]['created_at']).toBe('2020-06-20T07:24:00.000Z');
+            expect(comments[0]['comment_id']).toBe(11);
+            expect(comments[0]['body']).toBe('Ambidextrous marsupial');
+            expect(comments[0]['article_id']).toBe(3);
+            expect(comments[0]['author']).toBe('icellusedkars');
+            expect(comments[0]['votes']).toBe(0);
+            expect(comments[0]['created_at']).toBe('2020-09-19T23:10:00.000Z');
+        })
+    })
+
+    test('returns 404 status code and message article does not exist when given a valid but non-existent id', () => {
+        return request(app)
+          .get('/api/articles/999/comments')
+          .expect(404)
+          .then((response) => {
+            expect(response.body.msg).toBe('article does not exist');
+          });
+      });
+
+    test('returns 400 error code and message Bad Request when given an invalid id', () => {
+    return request(app)
+        .get('/api/articles/not-an-article/comments')
+        .expect(400)
+        .then((response) => {
+        expect(response.body.msg).toBe('Bad Request');
+        });
+    });
+
+})
+
+
 describe("GET /api/articles", () => {
     test("return array of articles, with the correct properties AND no property body", () => {
         return request(app)
