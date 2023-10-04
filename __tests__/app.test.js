@@ -183,6 +183,29 @@ describe("GET /api/articles/:article_id/comments", () => {
 
 })
 
+describe("GET /api/articles topic query", () => {
+    test("query filters articles by a specific topic", () => {
+        return request(app)
+        .get("/api/articles?topic=cats")
+        .then((response) => {
+            const articles = response.body.articles
+            expect(articles.length).toBe(1)
+            articles.forEach((article) => {
+                expect(article.topic).toBe('cats')
+            })
+        })
+    })
+
+    test("responsds with a 404 not found with topic specified does not exist", () => {
+        return request(app)
+        .get("/api/articles?topic=hello")
+        .then((response) => {
+            expect(response.body.msg).toBe('topic does not exist');
+            })
+        })
+})
+
+
 
 
 
