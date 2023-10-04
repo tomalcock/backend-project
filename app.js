@@ -5,11 +5,13 @@ const app = express();
 const {readFile} = require('fs/promises');
 
 const getTopics = require('./controllers/topics.controllers.js');
-const {getArticleByID,getArticles} = require('./controllers/articles.controllers.js')
+const {getArticleByID,getArticles,patchArticles} = require('./controllers/articles.controllers.js')
 const {getComments,postComment} = require('./controllers/comments.controllers.js');
 
 app.use(express.json());
 
+
+app.use(express.json());
 
 app.get("/api/healthcheck", (req,res) => {
     res.status(200).send({message: "healthcheck complete"})
@@ -30,6 +32,7 @@ app.get("/api/articles/:article_id/comments",getComments);
 
 app.get("/api/articles", getArticles);
 
+app.patch("/api/articles/:article_id", patchArticles);
 app.post("/api/articles/:article_id/comments", postComment)
 
 app.all('/*', (req,res) => {

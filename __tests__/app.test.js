@@ -218,7 +218,6 @@ describe("POST /api/articles/:article_id/comments", () => {
       });
 })
 
-
 describe("GET /api/articles/:article_id/comments", () => {
     test('returns array of comments for the queried article id with correct properties AND created_at in descending order', () => {
         return request(app)
@@ -261,6 +260,79 @@ describe("GET /api/articles/:article_id/comments", () => {
 
 })
 
+describe("PATCH /api/articles/:article_id", () => {
+    test('updates votes of a specified article and responds with updated article', () => {
+        const newVotes = {
+            inc_votes: 50
+        }
+        return request(app)
+        .patch('/api/articles/3')
+        .send(newVotes)
+        .expect(200)
+        .then((response) => {
+            const updatedArt = response.body.updatedArticle;
+            expect(updatedArt.title).toBe("Eight pug gifs that remind me of mitch");
+            expect(updatedArt.topic).toBe("mitch");
+            expect(updatedArt.author).toBe("icellusedkars");
+            expect(updatedArt.body).toBe("some gifs");
+            expect(updatedArt.created_at).toBe("2020-11-03T09:12:00.000Z");
+            expect(updatedArt.article_img_url).toBe("https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700");
+            expect(updatedArt.votes).toBe(50);
+        })
+    })
 
+    test('responds with a 404 code and error message when provided with a bad article_id (no article with specified id)', () => {
+        const newVotes = {
+            inc_votes: 50
+        }
+        return request(app)
+          .patch('/api/articles/999')
+          .send(newVotes)
+          .expect(404)
+          .then((response) => {
+            expect(response.body.msg).toBe('article does not exist');
+          });
+      });
+
+    test('responds with a 400 code and error message when provided with a bad article_id (article_id is invalid)', () => {
+    const newVotes = {
+        inc_votes: 50
+    }
+    return request(app)
+        .patch('/api/articles/hello')
+        .send(newVotes)
+        .expect(400)
+        .then((response) => {
+        expect(response.body.msg).toBe('Bad Request');
+        });
+    });
+
+    test('responds with a 400 code and error message when provided with a body that does not include new votes', () => {
+    const newVotes = {
+        
+    }
+        return request(app)
+            .patch('/api/articles/3')
+            .send(newVotes)
+            .expect(400)
+            .then((response) => {
+            expect(response.body.msg).toBe('must include new votes');
+        });
+    });
+
+    test('responds with a 400 code and error message when provided with a body that includes votes BUT its not a number', () => {
+        const newVotes = {
+            inc_votes: 'hello'
+        }
+            return request(app)
+                .patch('/api/articles/3')
+                .send(newVotes)
+                .expect(400)
+                .then((response) => {
+                expect(response.body.msg).toBe('must include new votes');
+            });
+        });
+
+})
 
 
