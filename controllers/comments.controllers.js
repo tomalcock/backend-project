@@ -1,7 +1,6 @@
 const {insertComment,isUsernameValid,fetchComments} = require('../models/comments.models.js');
 
 function postComment(req,res,next) {
-    console.log('in controllers')
     const newComment = req.body
     const article_id = req.params.article_id;
     const username = newComment.username
