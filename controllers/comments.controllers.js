@@ -1,4 +1,4 @@
-const fetchComments = require('../models/comments.models.js');
+const {fetchComments,removeComment} = require('../models/comments.models.js');
 
 function getComments(req,res,next) {
     const article_id = req.params.article_id;
@@ -10,4 +10,13 @@ function getComments(req,res,next) {
     .catch(err => next(err));
 }
 
-module.exports = getComments;
+function deleteComment(req,res,next) {
+    const {comment_id} = req.params;
+    console.log('you are in controllers');
+    removeComment(comment_id)
+    .then(() => {
+        res.status(204).send();
+    })
+    .catch(err => next(err))
+}
+module.exports = {getComments,deleteComment};
