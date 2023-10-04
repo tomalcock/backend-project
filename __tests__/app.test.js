@@ -213,7 +213,6 @@ describe("PATCH /api/articles/:article_id", () => {
           .send(newVotes)
           .expect(404)
           .then((response) => {
-            console.log(response)
             expect(response.body.msg).toBe('article does not exist');
           });
       });
@@ -227,7 +226,6 @@ describe("PATCH /api/articles/:article_id", () => {
         .send(newVotes)
         .expect(400)
         .then((response) => {
-        console.log(response)
         expect(response.body.msg).toBe('Bad Request');
         });
     });

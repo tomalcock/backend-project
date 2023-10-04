@@ -23,7 +23,7 @@ function patchArticles(req,res,next) {
     console.log('in controllers')
     article_id = req.params.article_id;
     newVotes = req.body.inc_votes;
-    if(newVotes === undefined|| typeof newVotes != 'number') {
+    if(newVotes === undefined|| typeof newVotes !== 'number') {
         next({status:400, msg: "must include new votes"});
     }
     updateArticles(article_id,newVotes)
