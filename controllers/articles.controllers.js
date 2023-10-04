@@ -20,13 +20,18 @@ function getArticles(req,res,next) {
 }
 
 function patchArticles(req,res,next) {
+    console.log('in controllers')
     article_id = req.params.article_id;
     newVotes = req.body.inc_votes;
+    if(newVotes === undefined|| typeof newVotes != 'number') {
+        next({status:400, msg: "must include new votes"});
+    }
     updateArticles(article_id,newVotes)
     .then((newArticle) => {
         const articleObj = {updatedArticle: newArticle};
         res.status(200).send(articleObj);
     })
+    .catch(err => next(err));
 }
 
 

@@ -203,6 +203,61 @@ describe("PATCH /api/articles/:article_id", () => {
             expect(updatedArt.votes).toBe(50);
         })
     })
+
+    test('responds with a 404 code and error message when provided with a bad article_id (no article with specified id)', () => {
+        const newVotes = {
+            inc_votes: 50
+        }
+        return request(app)
+          .patch('/api/articles/999')
+          .send(newVotes)
+          .expect(404)
+          .then((response) => {
+            console.log(response)
+            expect(response.body.msg).toBe('article does not exist');
+          });
+      });
+
+    test('responds with a 400 code and error message when provided with a bad article_id (article_id is invalid)', () => {
+    const newVotes = {
+        inc_votes: 50
+    }
+    return request(app)
+        .patch('/api/articles/hello')
+        .send(newVotes)
+        .expect(400)
+        .then((response) => {
+        console.log(response)
+        expect(response.body.msg).toBe('Bad Request');
+        });
+    });
+
+    test('responds with a 400 code and error message when provided with a body that does not include new votes', () => {
+    const newVotes = {
+        
+    }
+        return request(app)
+            .patch('/api/articles/3')
+            .send(newVotes)
+            .expect(400)
+            .then((response) => {
+            expect(response.body.msg).toBe('must include new votes');
+        });
+    });
+
+    test('responds with a 400 code and error message when provided with a body that includes votes BUT its not a number', () => {
+        const newVotes = {
+            inc_votes: 'hello'
+        }
+            return request(app)
+                .patch('/api/articles/3')
+                .send(newVotes)
+                .expect(400)
+                .then((response) => {
+                expect(response.body.msg).toBe('must include new votes');
+            });
+        });
+
 })
 
 
