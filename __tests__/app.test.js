@@ -183,6 +183,26 @@ describe("GET /api/articles/:article_id/comments", () => {
 
 })
 
-
+describe("PATCH /api/articles/:article_id", () => {
+    test('updates votes of a specified article and responds with updated article', () => {
+        const newVotes = {
+            inc_votes: 50
+        }
+        return request(app)
+        .patch('/api/articles/3')
+        .send(newVotes)
+        .expect(200)
+        .then((response) => {
+            const updatedArt = response.body.updatedArticle;
+            expect(updatedArt.title).toBe("Eight pug gifs that remind me of mitch");
+            expect(updatedArt.topic).toBe("mitch");
+            expect(updatedArt.author).toBe("icellusedkars");
+            expect(updatedArt.body).toBe("some gifs");
+            expect(updatedArt.created_at).toBe("2020-11-03T09:12:00.000Z");
+            expect(updatedArt.article_img_url).toBe("https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700");
+            expect(updatedArt.votes).toBe(50);
+        })
+    })
+})
 
 
