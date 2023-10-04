@@ -34,11 +34,22 @@ app.all('/*', (req,res) => {
 })
 
 app.use((err,req,res,next) => {
+    //console.log(err)
+    //console.log(err.code)
     if(err.status && err.msg) {
         res.status(err.status).send({msg: err.msg})
     }
-    if(err.code === '22P02'|'23503') {
+    if(err.length === 240) {
         res.status(400).send({msg: 'Bad Request'})
+    }
+    if(err.constraint === 'comments_article_id_fkey') {
+        res.status(404).send({msg: 'not found'})
+    }
+    if(err.code === '22P02'|| err.code === '23503') {
+        res.status(400).send({msg: 'Bad Request'})
+    }
+    if(err.code === '23502') {
+        res.status(404).send({msg: 'not found'})
     }
     res.status(err.status).send({msg: err.msg})
 })
