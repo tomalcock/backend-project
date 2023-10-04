@@ -183,6 +183,32 @@ describe("GET /api/articles/:article_id/comments", () => {
 
 })
 
+describe("GET /api/users", () => {
+    test("return array of user objects with properties username, name and avater_url", () => {
+        return request(app)
+        .get("/api/users")
+        .expect(200)
+        .then((response) => {
+            users = response.body.users
+            expect(users.length).toBe(4)
+            users.forEach((user) => {
+                expect(user.hasOwnProperty('username')).toBe(true);
+                expect(user.hasOwnProperty('name')).toBe(true);
+                expect(user.hasOwnProperty('avatar_url')).toBe(true);
+            })
+        })
+    })
+
+    test("returns 404 Not Found if path is not a route", () => {
+        return request(app)
+        .get('/api/userssss')
+        .expect(404)
+        .then(({body}) => {
+            expect(body.msg).toBe('path not found')
+        })
+    })
+})
+
 
 
 
