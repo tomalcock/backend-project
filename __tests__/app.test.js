@@ -183,7 +183,7 @@ describe("GET /api/articles/:article_id/comments", () => {
 
 })
 
-describe.only("DELETE /api/comments/:comment_id", () => {
+describe("DELETE /api/comments/:comment_id", () => {
     test("deletes the specified comment and sends no body back", () => {
         return request(app)
         .delete('/api/comments/1')

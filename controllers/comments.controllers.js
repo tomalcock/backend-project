@@ -12,11 +12,10 @@ function getComments(req,res,next) {
 
 function deleteComment(req,res,next) {
     const {comment_id} = req.params;
-    console.log('you are in controllers');
     removeComment(comment_id)
     .then(() => {
         res.status(204).send();
     })
-    .catch(err => next(err))
+    .catch(err => next(err));
 }
 module.exports = {getComments,deleteComment};
