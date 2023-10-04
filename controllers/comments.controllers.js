@@ -1,4 +1,4 @@
-const {insertComment,isUsernameValid} = require('../models/comments.models.js');
+const {insertComment,isUsernameValid,fetchComments} = require('../models/comments.models.js');
 
 function postComment(req,res,next) {
     console.log('in controllers')
@@ -25,4 +25,14 @@ function postComment(req,res,next) {
     })
 }
 
-module.exports = postComment;
+function getComments(req,res,next) {
+    const article_id = req.params.article_id;
+    fetchComments(article_id)
+    .then((comments) => {
+        const commentObj = {comments:comments}
+        res.status(200).send(commentObj);
+    })
+    .catch(err => next(err));
+}
+
+module.exports = {getComments,postComment};

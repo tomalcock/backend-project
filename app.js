@@ -6,9 +6,10 @@ const {readFile} = require('fs/promises');
 
 const getTopics = require('./controllers/topics.controllers.js');
 const {getArticleByID,getArticles} = require('./controllers/articles.controllers.js')
-const postComment = require('./controllers/comments.controllers.js');
+const {getComments,postComment} = require('./controllers/comments.controllers.js');
 
 app.use(express.json());
+
 
 app.get("/api/healthcheck", (req,res) => {
     res.status(200).send({message: "healthcheck complete"})
@@ -24,6 +25,8 @@ app.get("/api", (req,res) => {
 app.get("/api/topics", getTopics);
 
 app.get("/api/articles/:article_id", getArticleByID);
+
+app.get("/api/articles/:article_id/comments",getComments);
 
 app.get("/api/articles", getArticles);
 
