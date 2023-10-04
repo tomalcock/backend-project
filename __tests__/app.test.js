@@ -157,6 +157,7 @@ describe("POST /api/articles/:article_id/comments", () => {
             expect(newComm.body).toBe('this is a test');
             expect(newComm.article_id).toBe(3);
             expect(newComm.votes).toBe(0);
+            expect(newComm.hasOwnProperty('created_at')).toBe(true);
         })
     })
 
@@ -176,7 +177,7 @@ describe("POST /api/articles/:article_id/comments", () => {
 
       test('responds with a 400 code and error message when provided with an incorrect body', () => {
         const newComment = {
-            user: 'butter_bridge',
+            username: 'butter_bridge',
             bodyyyy: "this is a test"
         }
         return request(app)
@@ -190,7 +191,7 @@ describe("POST /api/articles/:article_id/comments", () => {
 
       test('responds with a 400 code and error message when provided with an invalid article id', () => {
         const newComment = {
-            user: 'butter_bridge',
+            username: 'butter_bridge',
             body: "this is a test"
         }
         return request(app)
@@ -204,7 +205,7 @@ describe("POST /api/articles/:article_id/comments", () => {
 
       test('responds with a 404 code and error message when provided with a username that is not found', () => {
         const newComment = {
-            user: 'Tom',
+            username: 'Tom',
             body: "this is a test"
         }
         return request(app)
@@ -212,7 +213,7 @@ describe("POST /api/articles/:article_id/comments", () => {
           .send(newComment)
           .expect(404)
           .then((response) => {
-            expect(response.body.msg).toBe('not found');
+            expect(response.body.msg).toBe('username not found');
           });
       });
 })

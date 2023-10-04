@@ -14,5 +14,20 @@ function insertComment({username,body},article_id) {
     })
 }
 
+function isUsernameValid(username){
+    console.log('you are in usernameValid')
+    return db
+    .query(
+        `SELECT * FROM users WHERE username = $1;`,
+        [username]
+    )
+    .then((response) => {
+        if(response.rows.length === 0) {
+            return 'false'
+        }
+        return 'true';
+    })
+}
 
-module.exports = insertComment
+
+module.exports = {insertComment,isUsernameValid}
