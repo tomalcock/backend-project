@@ -260,6 +260,32 @@ describe("GET /api/articles/:article_id/comments", () => {
 
 })
 
+describe("DELETE /api/comments/:comment_id", () => {
+    test("deletes the specified comment and sends no body back", () => {
+        return request(app)
+        .delete('/api/comments/1')
+        .expect(204)
+    })
+
+    test('responds with an 404 status and error message when given a non-existent id', () => {
+        return request(app)
+          .delete('/api/comments/999')
+          .expect(404)
+          .then((response) => {
+            expect(response.body.msg).toBe('comment does not exist');
+          });
+    });
+    
+    test('responds with an 400 status and error message when given an invalid id', () => {
+        return request(app)
+          .delete('/api/comments/not-a-comment')
+          .expect(400)
+          .then((response) => {
+            expect(response.body.msg).toBe('Bad Request');
+          });
+      });
+})
+
 describe("PATCH /api/articles/:article_id", () => {
     test('updates votes of a specified article and responds with updated article', () => {
         const newVotes = {

@@ -1,4 +1,4 @@
-const {insertComment,isUsernameValid,fetchComments} = require('../models/comments.models.js');
+const {insertComment,isUsernameValid,fetchComments,removeComment} = require('../models/comments.models.js');
 
 function postComment(req,res,next) {
     const newComment = req.body
@@ -34,4 +34,13 @@ function getComments(req,res,next) {
     .catch(err => next(err));
 }
 
-module.exports = {getComments,postComment};
+function deleteComment(req,res,next) {
+    const {comment_id} = req.params;
+    removeComment(comment_id)
+    .then(() => {
+        res.status(204).send();
+    })
+    .catch(err => next(err));
+}
+module.exports = {getComments,postComment,deleteComment};
+

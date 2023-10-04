@@ -6,10 +6,7 @@ const {readFile} = require('fs/promises');
 
 const getTopics = require('./controllers/topics.controllers.js');
 const {getArticleByID,getArticles,patchArticles} = require('./controllers/articles.controllers.js')
-const {getComments,postComment} = require('./controllers/comments.controllers.js');
-
-app.use(express.json());
-
+const {getComments,postComment,deleteComment} = require('./controllers/comments.controllers.js');
 
 app.use(express.json());
 
@@ -32,6 +29,7 @@ app.get("/api/articles/:article_id/comments",getComments);
 
 app.get("/api/articles", getArticles);
 
+app.delete("/api/comments/:comment_id", deleteComment)
 app.patch("/api/articles/:article_id", patchArticles);
 app.post("/api/articles/:article_id/comments", postComment)
 
