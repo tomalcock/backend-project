@@ -203,6 +203,15 @@ describe("GET /api/articles topic query", () => {
             expect(response.body.msg).toBe('topic does not exist');
             })
         })
+
+    test("responds with a 200 found topic but no articles relating to that topic", () => {
+        return request(app)
+        .get("/api/articles?topic=paper")
+        .expect(200)
+        .then((response) => {
+            expect(response.body.msg).toBe('topic exists but no articles found');
+            })
+        })
 })
 
 

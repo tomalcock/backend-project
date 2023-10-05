@@ -1,5 +1,7 @@
 const db = require('../db/connection.js')
 const format = require('pg-format');
+const { checkTopicExists } = require('./topics.models.js');
+
 
 
 function fetchArticleByID(article_id) {
@@ -28,16 +30,24 @@ function fetchArticles(topic) {
         return response.rows;
     })
 } else {
-    return db
-    .query(`SELECT * FROM articles WHERE articles.topic = $1;`,
-    [topic])
-    .then((response) => {
-        if(response.rowCount === 0) {
-            return Promise.reject({status: 404, msg: "topic does not exist"})
-        }
-        console.log(response)
-        return response.rows
+    return checkTopicExists(topic)
+    .then(() => {
+        return db
+        .query(`SELECT articles.article_id,articles.author,articles.title,articles.topic,articles.created_at,articles.votes,articles.article_img_url, COUNT(comments.article_id) AS comment_count
+        FROM articles
+        LEFT JOIN comments ON comments.article_id = articles.article_id
+        GROUP BY articles.article_id
+        HAVING articles.topic = $1
+        ;`,
+        [topic])   
     })
+    .then((response) => {
+        if(response.rows.length === 0) {
+            return Promise.reject({status:200, msg: "topic exists but no articles found"})
+        }
+        return response.rows;
+    })
+   
 }
 }
 
