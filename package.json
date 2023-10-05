@@ -7,6 +7,7 @@
     "start": "node listen.js",
     "setup-dbs": "psql -f ./db/setup.sql",
     "seed": "node ./db/seeds/run-seed.js",
+    "seed-prod": "NODE_ENV=production node ./db/seeds/run-seed.js",
     "test": "jest",
     "testa": "jest app.test.js",
     "prepare": "husky install",
