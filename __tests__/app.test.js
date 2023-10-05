@@ -69,6 +69,7 @@ describe("GET /api/articles/:article_id", () => {
             expect(article.body).toBe("some gifs");
             expect(article.created_at).toBe('2020-11-03T09:12:00.000Z');
             expect(article.article_img_url).toBe("https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700");
+            expect(article.comment_count).toBe('2');
         })
     })
 
