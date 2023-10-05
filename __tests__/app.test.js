@@ -260,6 +260,37 @@ describe("GET /api/articles/:article_id/comments", () => {
 
 })
 
+describe("GET /api/articles topic query", () => {
+    test("query filters articles by a specific topic", () => {
+        return request(app)
+        .get("/api/articles?topic=cats")
+        .then((response) => {
+            const articles = response.body.articles
+            expect(articles.length).toBe(1)
+            articles.forEach((article) => {
+                expect(article.topic).toBe('cats')
+            })
+        })
+    })
+
+    test("responds with a 404 not found with topic specified does not exist", () => {
+        return request(app)
+        .get("/api/articles?topic=hello")
+        .then((response) => {
+            expect(response.body.msg).toBe('topic does not exist');
+            })
+        })
+
+    test("responds with a 200 found topic but no articles relating to that topic", () => {
+        return request(app)
+        .get("/api/articles?topic=paper")
+        .expect(200)
+        .then((response) => {
+            expect(response.body.msg).toBe('topic exists but no articles found');
+            })
+        })
+})
+    
 describe("GET /api/users", () => {
     test("return array of user objects with properties username, name and avater_url", () => {
         return request(app)
@@ -275,7 +306,7 @@ describe("GET /api/users", () => {
             })
         })
     })
-
+    
     test("returns 404 Not Found if path is not a route", () => {
         return request(app)
         .get('/api/userssss')

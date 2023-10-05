@@ -1,3 +1,4 @@
+
 const {fetchArticleByID,fetchArticles,updateArticles} = require('../models/articles.models.js');
 
 
@@ -11,7 +12,8 @@ function getArticleByID(req,res,next){
 }
 
 function getArticles(req,res,next) {
-    fetchArticles()
+    const {topic} = req.query
+    fetchArticles(topic)
     .then((response) => {
         const articlesObj = {articles: response};
         res.status(200).send(articlesObj)
