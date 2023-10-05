@@ -196,7 +196,7 @@ describe("GET /api/articles topic query", () => {
         })
     })
 
-    test("responsds with a 404 not found with topic specified does not exist", () => {
+    test("responds with a 404 not found with topic specified does not exist", () => {
         return request(app)
         .get("/api/articles?topic=hello")
         .then((response) => {
