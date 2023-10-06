@@ -44,7 +44,6 @@ function deleteComment(req,res,next) {
 }
 
 function patchComment(req,res,next) {
-    console.log('in controller')
     comment_id = req.params.comment_id;
     newVotes = req.body.inc_votes;
     if(newVotes === undefined|| typeof newVotes !== 'number') {

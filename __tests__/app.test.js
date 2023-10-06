@@ -617,3 +617,82 @@ describe("PATCH /api/comments/:comment_id", () => {
         });
 })
 
+describe("POST /api/articles", () => {
+    test('inserts a new article to the db and sends back the new article and correct properties', () => {
+        const newArticle = {
+            author: 'jonny',
+            title: 'coding',
+            body: 'coding coding coding',
+            topic: 'cats',
+            article_img_url: 'https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700'
+        }
+        return request(app)
+        .post('/api/articles')
+        .send(newArticle)
+        .expect(201)
+        .then((response) => {
+            const newArt = response.body.article
+            expect(newArt.title).toBe('coding');
+            expect(newArt.author).toBe('butter_bridge');
+            expect(newArt.body).toBe('coding coding coding');
+            expect(newArt.topic).toBe('cats');
+            expect(newArt.article_img_url).toBe('https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700')
+            expect(newArt.article_id).toBe(14);
+            expect(newArt.votes).toBe(0);
+            expect(newArt.hasOwnProperty('created_at')).toBe(true);
+            expect(newArt.comment_count).toBe(0);
+        })
+    })
+
+    test('responds with a 400 code and error message when provided with an incorrect body', () => {
+    const newArticle = {
+        authorrrrr: 'jonny',
+        titleee: 'coding',
+        bodyyy: 'coding coding coding',
+        topiccc: 'cats',
+        aaaarticle_img_url: 'https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700'
+    }
+    return request(app)
+        .post('/api/articles')
+        .send(newArticle)
+        .expect(400)
+        .then((response) => {
+        expect(response.body.msg).toBe('Bad Request');
+        });
+    });
+
+    test('responds with a 404 code and error message when provided with a username that is not found', () => {
+    const newArticle = {
+        author: 'tom',
+        title: 'coding',
+        body: 'coding coding coding',
+        topic: 'cats',
+        article_img_url: 'https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700'
+    }
+    return request(app)
+        .post('/api/articles')
+        .send(newArticle)
+        .expect(404)
+        .then((response) => {
+        expect(response.body.msg).toBe('username not found');
+        });
+    });
+
+    test('responds with a 404 code and error message when provided with a username that is not found', () => {
+    const newArticle = {
+        author: 'jonny',
+        title: 'coding',
+        body: 'coding coding coding',
+        topic: 'coding',
+        article_img_url: 'https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700'
+    }
+    return request(app)
+        .post('/api/articles')
+        .send(newArticle)
+        .expect(404)
+        .then((response) => {
+        expect(response.body.msg).toBe('not found');
+        });
+    });
+})
+

@@ -1,5 +1,5 @@
 
-const {fetchArticleByID,fetchArticles,updateArticles} = require('../models/articles.models.js');
+const {fetchArticleByID,fetchArticles,updateArticles, insertArticle,isUserValid} = require('../models/articles.models.js');
 
 
 function getArticleByID(req,res,next){
@@ -35,6 +35,38 @@ function patchArticles(req,res,next) {
     .catch(err => next(err));
 }
 
+function postArticle(req,res,next) {
+    console.log('in controller')
+    const newArticle = req.body;
+    console.log(newArticle)
+    const author = req.body.author;
+    const title =req.body.title;
+    const body = req.body.body;
+    const topic = req.body.topic;
+    const article_img_url = req.body.article_img_url;
+    if (author === undefined || title === undefined || body === undefined || topic === undefined || article_img_url === undefined ) {
+        next({status:400, msg: 'Bad Request'})
+    }
+    isUserValid(author)
+    .then((response) => {
+        if (response === 'false') {
+            next({status:404, msg: 'username not found'})
+        } else {
+        return
+        }
+    })
+    .then(() => {
+        return insertArticle(newArticle)
+    })
+    .then((response) => {
+        const newArticle = response
+        res.status(201).send({article:newArticle});
+    })
+    .catch((err) => {
+        next(err)
+    })
+}
 
 
-module.exports = {getArticleByID, getArticles, patchArticles};
+
+module.exports = {getArticleByID, getArticles, patchArticles, postArticle};

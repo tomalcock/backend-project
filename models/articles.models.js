@@ -103,4 +103,42 @@ function updateArticles(article_id,newVotes) {
 
 }
 
-module.exports = {fetchArticleByID, fetchArticles, updateArticles};
+function insertArticle({author,title,body,topic,article_img_url}) {
+    console.log('in model')
+    return db
+    .query(
+        `SELECT * FROM users WHERE users.name = $1;`,
+        [author]
+    )
+    .then((response) => {
+        const username = response.rows[0].username;
+        return db
+    .query(
+    `INSERT INTO articles (title, topic, author, body, article_img_URL) VALUES ($1,$2,$3,$4,$5) RETURNING *;`,
+    [title,topic,username,body,article_img_url]
+    )
+    })
+    .then((result) => {
+        const newArticle = result.rows[0];
+        newArticle.comment_count = 0; 
+        return newArticle;
+    })
+}
+
+function isUserValid(author){
+    console.log('in username function')
+    return db
+    .query(
+        `SELECT * FROM users WHERE name = $1;`,
+        [author]
+    )
+    .then((response) => {
+        if(response.rows.length === 0) {
+            return 'false'
+        }
+        return 'true';
+    })
+}
+
+module.exports = {fetchArticleByID, fetchArticles, updateArticles, insertArticle, isUserValid};
+
