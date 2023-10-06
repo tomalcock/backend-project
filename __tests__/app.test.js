@@ -546,7 +546,7 @@ describe("GET /api/users/:username", () => {
       });
 })
 
-describe.only("PATCH /api/comments/:comment_id", () => {
+describe("PATCH /api/comments/:comment_id", () => {
     test('updates votes of a specified comment and responds with updated comment', () => {
         const newVotes = {
             inc_votes: 50
