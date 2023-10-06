@@ -1,10 +1,6 @@
 const express = require("express");
 const app = express();
 const {readFile} = require('fs/promises');
-const getTopics = require('./controllers/topics.controllers.js');
-const {getArticleByID,getArticles,patchArticles} = require('./controllers/articles.controllers.js');
-const getUsers = require('./controllers/users.controllers.js');
-const {getComments,postComment,deleteComment} = require('./controllers/comments.controllers.js');
 const apiRouter = require('./routes/api-router.js')
 
 app.use(express.json());
@@ -16,12 +12,6 @@ app.get("/api", (req,res) => {
     })
 })
 app.use('/api', apiRouter);
-
-
-
-
-// app.delete("/api/comments/:comment_id", deleteComment);
-
 
 app.all('/*', (req,res) => {
     res.status(404).send({msg: "path not found"})
