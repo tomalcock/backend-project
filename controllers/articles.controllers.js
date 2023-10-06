@@ -12,8 +12,8 @@ function getArticleByID(req,res,next){
 }
 
 function getArticles(req,res,next) {
-    const {topic} = req.query
-    fetchArticles(topic)
+    const userQuery = req.query
+    fetchArticles(userQuery)
     .then((response) => {
         const articlesObj = {articles: response};
         res.status(200).send(articlesObj)

@@ -23,8 +23,22 @@ function fetchArticleByID(article_id) {
     })
 }
 
-function fetchArticles(topic) {
-    if(topic === undefined) {
+function fetchArticles(userQuery) {
+    const validSortBys = {
+        title: "title",
+        topic: "topic",
+        author: "author",
+        created_at: "created_at",
+        votes: "votes",
+        comment_count: "comment_count"
+    }
+
+    const validOrders = {
+        ascending: "ASC",
+        descending: "DESC"
+    }
+
+  if(userQuery.topic === undefined && userQuery.sort_by === undefined) {
     return db
     .query(`SELECT articles.article_id,articles.author,articles.title,articles.topic,articles.created_at,articles.votes,articles.article_img_url, COUNT(comments.article_id) AS comment_count
     FROM articles
@@ -34,8 +48,8 @@ function fetchArticles(topic) {
     .then(response => {
         return response.rows;
     })
-} else {
-    return checkTopicExists(topic)
+} if(userQuery.topic !== undefined && userQuery.sort_by === undefined) {
+    return checkTopicExists(userQuery.topic)
     .then(() => {
         return db
         .query(`SELECT articles.article_id,articles.author,articles.title,articles.topic,articles.created_at,articles.votes,articles.article_img_url, COUNT(comments.article_id) AS comment_count
@@ -44,7 +58,7 @@ function fetchArticles(topic) {
         GROUP BY articles.article_id
         HAVING articles.topic = $1
         ;`,
-        [topic])   
+        [userQuery.topic])   
     })
     .then((response) => {
         if(response.rows.length === 0) {
@@ -52,7 +66,26 @@ function fetchArticles(topic) {
         }
         return response.rows;
     })
-   
+} if(!(userQuery.sort_by in validSortBys)) {
+    return Promise.reject({status:400, message: "invalid sort by query"})
+} else{
+    let query = `SELECT articles.article_id,articles.author,articles.title,articles.topic,articles.created_at,articles.votes,articles.article_img_url, COUNT(comments.article_id) AS comment_count
+    FROM articles
+    LEFT JOIN comments ON comments.article_id = articles.article_id
+    GROUP BY articles.article_id
+    ORDER BY ${validSortBys[userQuery.sort_by]}`
+    
+    if(userQuery.direction in validOrders) {
+        query += ` ${validOrders[userQuery.direction]};`;
+    }
+
+    if(userQuery.direction === undefined || !(userQuery.direction in validOrders)){
+        query += ` DESC;`
+    }
+    return db.query(query)
+    .then((response) => {
+        return response.rows;
+    })
 }
 }
 

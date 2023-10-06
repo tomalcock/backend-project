@@ -436,4 +436,96 @@ describe("GET /api/articles/:article_id comment count", () => {
     })
 })
 
+describe("GET /api/articles sortby and order query", () => {
+    test("returns sorted by title alphabetical if passed title query and ascending", () => {
+        return request(app)
+        .get("/api/articles?sort_by=title&direction=ascending")
+        .then((response) => {
+        const articles = response.body.articles;
+        expect(articles).toBeSortedBy('title')
+    })
+    })
+
+    test("returns sorted by topic alphabetical if passed topic query and ascending", () => {
+        return request(app)
+        .get("/api/articles?sort_by=topic&direction=ascending")
+        .then((response) => {
+        const articles = response.body.articles;
+        expect(articles).toBeSortedBy('topic')
+    })
+    })
+
+    test("returns sorted by author alphabetical if passed author query and ascending", () => {
+        return request(app)
+        .get("/api/articles?sort_by=author&direction=ascending")
+        .then((response) => {
+        const articles = response.body.articles;
+        expect(articles).toBeSortedBy('author')
+    })
+    })
+
+    test("returns sorted by created_at ascending if passed created_at query and ascending", () => {
+        return request(app)
+        .get("/api/articles?sort_by=created_at&direction=ascending")
+        .then((response) => {
+        const articles = response.body.articles;
+        expect(articles).toBeSortedBy('created_at')
+    })
+    })
+
+    test("returns sorted by votes ascending if passed votes query and ascending", () => {
+        return request(app)
+        .get("/api/articles?sort_by=votes&direction=ascending")
+        .then((response) => {
+        const articles = response.body.articles;
+        expect(articles).toBeSortedBy('votes')
+    })
+    })
+
+    test("returns sorted by comment count ascending if passed comment count query and ascending", () => {
+        return request(app)
+        .get("/api/articles?sort_by=comment_count&direction=ascending")
+        .then((response) => {
+        const articles = response.body.articles;
+        expect(articles).toBeSortedBy(+'comment_count')
+    })
+    })
+
+    test("returns sorted by comment count descending if passed comment count query but no order by", () => {
+        return request(app)
+        .get("/api/articles?sort_by=comment_count")
+        .then((response) => {
+        const articles = response.body.articles;
+        expect(articles).toBeSortedBy(+'comment_count',{descending:true})
+    })
+    })
+
+    test("returns error code 400 and invalid sortby query if sort_by does not exist", () => {
+        return request(app)
+        .get("/api/articles?sort_by=topicccccc")
+        .expect(400)
+        .then((response) => {
+            expect(response.body.msg).toBe('invalid sort by query');
+        });
+    })
+
+    test("returns the query in default position (descending) if order_by does not exist", () => {
+        return request(app)
+        .get("/api/articles?sort_by=comment_count&direction=ascendingggg")
+        .expect(200)
+        .then((response) => {
+            const articles = response.body.articles;
+            expect(articles).toBeSortedBy(+'comment_count',{descending:true})
+        });
+    })
+
+    test("returns error code 400 and sort by message if both sort by and order by are invalid", () => {
+        return request(app)
+        .get("/api/articles?sort_by=topiccccc&direction=ascendingggg")
+        .expect(400)
+        .then((response) => {
+            expect(response.body.msg).toBe('invalid sort by query');
+        });
+    })
+});
 
