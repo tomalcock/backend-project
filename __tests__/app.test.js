@@ -523,3 +523,97 @@ describe("GET /api/articles sortby and order query", () => {
     })
 });
 
+describe("GET /api/users/:username", () => {
+    test("returns the requested username with correct properties", () => {
+        return request(app)
+        .get('/api/users/lurker')
+        .expect(200)
+        .then((response) => {
+            const user = response.body.user;
+            expect(user.username).toBe("lurker");
+            expect(user.name).toBe("do_nothing");
+            expect(user.avatar_url).toBe("https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png");
+        })
+    })
+
+    test('returns 404 status code and message user does not exist when given a valid but non-existent id', () => {
+        return request(app)
+          .get('/api/users/999')
+          .expect(404)
+          .then((response) => {
+            expect(response.body.msg).toBe('article does not exist');
+          });
+      });
+})
+
+describe.only("PATCH /api/comments/:comment_id", () => {
+    test('updates votes of a specified comment and responds with updated comment', () => {
+        const newVotes = {
+            inc_votes: 50
+        }
+        return request(app)
+        .patch('/api/comments/1')
+        .send(newVotes)
+        .expect(200)
+        .then((response) => {
+            const updatedCom = response.body.updatedComment;
+            expect(updatedCom.body).toBe("Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!");
+            expect(updatedCom.author).toBe("butter_bridge");
+            expect(updatedCom.created_at).toBe("2020-04-06T12:17:00.000Z");
+            expect(updatedCom.votes).toBe(66);
+        })
+    })
+
+    test('responds with a 404 code and error message when provided with a bad comment_id (no comment with specified id)', () => {
+        const newVotes = {
+            inc_votes: 50
+        }
+        return request(app)
+          .patch('/api/comments/999')
+          .send(newVotes)
+          .expect(404)
+          .then((response) => {
+            expect(response.body.msg).toBe('comment does not exist');
+          });
+      });
+
+    test('responds with a 400 code and error message when provided with a bad comment_id (comment_id is invalid)', () => {
+    const newVotes = {
+        inc_votes: 50
+    }
+    return request(app)
+        .patch('/api/articles/hello')
+        .send(newVotes)
+        .expect(400)
+        .then((response) => {
+        expect(response.body.msg).toBe('Bad Request');
+        });
+    });
+
+    test('responds with a 400 code and error message when provided with a body that does not include new votes', () => {
+    const newVotes = {
+        
+    }
+        return request(app)
+            .patch('/api/comments/1')
+            .send(newVotes)
+            .expect(400)
+            .then((response) => {
+            expect(response.body.msg).toBe('must include new votes');
+        });
+    });
+
+    test('responds with a 400 code and error message when provided with a body that includes votes BUT its not a number', () => {
+        const newVotes = {
+            inc_votes: 'hello'
+        }
+            return request(app)
+                .patch('/api/comments/1')
+                .send(newVotes)
+                .expect(400)
+                .then((response) => {
+                expect(response.body.msg).toBe('must include new votes');
+            });
+        });
+})
+

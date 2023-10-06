@@ -1,4 +1,4 @@
-const {insertComment,isUsernameValid,fetchComments,removeComment} = require('../models/comments.models.js');
+const {insertComment,isUsernameValid,fetchComments,removeComment,updateComment} = require('../models/comments.models.js');
 
 function postComment(req,res,next) {
     const newComment = req.body
@@ -42,5 +42,21 @@ function deleteComment(req,res,next) {
     })
     .catch(err => next(err));
 }
-module.exports = {getComments,postComment,deleteComment};
+
+function patchComment(req,res,next) {
+    console.log('in controller')
+    comment_id = req.params.comment_id;
+    newVotes = req.body.inc_votes;
+    if(newVotes === undefined|| typeof newVotes !== 'number') {
+        next({status:400, msg: "must include new votes"});
+    }
+    updateComment(comment_id,newVotes)
+    .then((newComment) => {
+        const commentObj = {updatedComment: newComment};
+        res.status(200).send(commentObj);
+    })
+    .catch(err => next(err));
+}
+module.exports = {getComments,postComment,deleteComment,patchComment};
+
 

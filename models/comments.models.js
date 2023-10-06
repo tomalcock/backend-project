@@ -51,5 +51,19 @@ function removeComment(comment_id) {
     })
 }
 
-module.exports = {fetchComments,insertComment,isUsernameValid,removeComment};
+function updateComment(comment_id) {
+    return db
+    .query(`UPDATE comments SET votes = votes + $1 WHERE comment_id = $2 RETURNING *;`,
+    [newVotes,comment_id])
+    .then((response) => {
+        if(response.rows.length === 0) {
+            return Promise.reject({status:404, msg: "comment does not exist"})
+        }
+        const updatedComment = response.rows[0];
+        return updatedComment;
+    })
+}
+module.exports = {fetchComments,insertComment,isUsernameValid,removeComment,updateComment};
+
+
 
