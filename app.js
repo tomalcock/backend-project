@@ -1,21 +1,13 @@
 const express = require("express");
-
 const app = express();
-
 const {readFile} = require('fs/promises');
-
 const getTopics = require('./controllers/topics.controllers.js');
 const {getArticleByID,getArticles,patchArticles} = require('./controllers/articles.controllers.js');
-
 const getUsers = require('./controllers/users.controllers.js');
-
 const {getComments,postComment,deleteComment} = require('./controllers/comments.controllers.js');
+const apiRouter = require('./routes/api-router.js')
 
 app.use(express.json());
-
-app.get("/api/healthcheck", (req,res) => {
-    res.status(200).send({message: "healthcheck complete"})
-})
 
 app.get("/api", (req,res) => {
     readFile('./endpoints.json','utf8').then((file) => {
@@ -23,22 +15,13 @@ app.get("/api", (req,res) => {
     res.status(200).send(fileContentsObj)
     })
 })
+app.use('/api', apiRouter);
 
-app.get("/api/topics", getTopics);
 
-app.get("/api/articles/:article_id", getArticleByID);
 
-app.get("/api/articles/:article_id/comments",getComments);
 
-app.get("/api/articles", getArticles);
+// app.delete("/api/comments/:comment_id", deleteComment);
 
-app.get("/api/users", getUsers);
-
-app.delete("/api/comments/:comment_id", deleteComment);
-
-app.patch("/api/articles/:article_id", patchArticles);
-
-app.post("/api/articles/:article_id/comments", postComment);
 
 app.all('/*', (req,res) => {
     res.status(404).send({msg: "path not found"})
