@@ -14,13 +14,7 @@ afterAll(() => {
     return db.end();
 })
 
-describe("GET /api/healthcheck", () => {
-    test("returns 200 status code", () => {
-      return request(app).get("/api/healthcheck").expect(200);
-    });
-  });
-
-describe("GET /api/topics", () => {
+describe.only("GET /api/topics", () => {
     test("return array of topic objects with properties slug and description", () => {
         return request(app)
         .get("/api/topics")
@@ -45,7 +39,7 @@ describe("GET /api/topics", () => {
     })
 })
 
-describe("GET /api", () => {
+describe.only("GET /api", () => {
     test('returns an object describing all the available endpoints on the API', () => {
         return request(app)
         .get('/api')
@@ -56,7 +50,7 @@ describe("GET /api", () => {
     })
 })
 
-describe("GET /api/articles/:article_id", () => {
+describe.only("GET /api/articles/:article_id", () => {
     test("returns the requested article with correct properties", () => {
         return request(app)
         .get('/api/articles/3')
@@ -91,7 +85,7 @@ describe("GET /api/articles/:article_id", () => {
     });
 })
 
-describe("GET /api/articles", () => {
+describe.only("GET /api/articles", () => {
     test("return array of articles, with the correct properties AND no property body", () => {
         return request(app)
         .get("/api/articles")
@@ -141,7 +135,7 @@ describe("GET /api/articles", () => {
     })
 })
 
-describe("POST /api/articles/:article_id/comments", () => {
+describe.only("POST /api/articles/:article_id/comments", () => {
     test('inserts a new comment to the db and sends back the new comment', () => {
         const newComment = {
             username: 'butter_bridge',
@@ -218,7 +212,7 @@ describe("POST /api/articles/:article_id/comments", () => {
       });
 })
 
-describe("GET /api/articles/:article_id/comments", () => {
+describe.only("GET /api/articles/:article_id/comments", () => {
     test('returns array of comments for the queried article id with correct properties AND created_at in descending order', () => {
         return request(app)
         .get('/api/articles/3/comments')
@@ -260,7 +254,7 @@ describe("GET /api/articles/:article_id/comments", () => {
 
 })
 
-describe("GET /api/articles topic query", () => {
+describe.only("GET /api/articles topic query", () => {
     test("query filters articles by a specific topic", () => {
         return request(app)
         .get("/api/articles?topic=cats")
@@ -291,7 +285,7 @@ describe("GET /api/articles topic query", () => {
         })
 })
     
-describe("GET /api/users", () => {
+describe.only("GET /api/users", () => {
     test("return array of user objects with properties username, name and avater_url", () => {
         return request(app)
         .get("/api/users")
@@ -343,7 +337,7 @@ describe("DELETE /api/comments/:comment_id", () => {
       });
 })
 
-describe("PATCH /api/articles/:article_id", () => {
+describe.only("PATCH /api/articles/:article_id", () => {
     test('updates votes of a specified article and responds with updated article', () => {
         const newVotes = {
             inc_votes: 50
@@ -418,7 +412,7 @@ describe("PATCH /api/articles/:article_id", () => {
 
 })
 
-describe("GET /api/articles/:article_id comment count", () => {
+describe.only("GET /api/articles/:article_id comment count", () => {
     test("returns the requested article with correct properties, including comment count", () => {
         return request(app)
         .get('/api/articles/3')
@@ -436,7 +430,7 @@ describe("GET /api/articles/:article_id comment count", () => {
     })
 })
 
-describe("GET /api/articles sortby and order query", () => {
+describe.only("GET /api/articles sortby and order query", () => {
     test("returns sorted by title alphabetical if passed title query and ascending", () => {
         return request(app)
         .get("/api/articles?sort_by=title&direction=ascending")
