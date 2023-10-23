@@ -1,7 +1,10 @@
 const express = require("express");
 const app = express();
 const {readFile} = require('fs/promises');
-const apiRouter = require('./routes/api-router.js')
+const apiRouter = require('./routes/api-router.js');
+const cors = require('cors');
+
+app.use(cors());
 
 app.use(express.json());
 
