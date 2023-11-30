@@ -463,6 +463,7 @@ describe("GET /api/articles sortby and order query", () => {
         .get("/api/articles?sort_by=created_at&direction=ascending")
         .then((response) => {
         const articles = response.body.articles;
+        console.log(articles)
         expect(articles).toBeSortedBy('created_at')
     })
     })

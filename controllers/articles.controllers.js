@@ -36,9 +36,7 @@ function patchArticles(req,res,next) {
 }
 
 function postArticle(req,res,next) {
-    console.log('in controller')
     const newArticle = req.body;
-    console.log(newArticle)
     const author = req.body.author;
     const title =req.body.title;
     const body = req.body.body;
