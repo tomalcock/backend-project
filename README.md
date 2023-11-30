@@ -12,6 +12,31 @@ Welcome to the **Northcoders News API**
 
 NC News API is a RESTful API designed to allow the front end to get, post, delete, patch and much more with articles, comments, topic and users.
 
+<!-- TABLE OF CONTENTS -->
+<details>
+  <summary>Table of Contents</summary>
+  <ol>
+    <li>
+      <a href="#installation-and-setup">Installation and Setup</a>
+      <ul>
+        <li><a href="#prerequisites">Prerequisites</a></li>
+        <li><a href="#dependencies-and-dev-dependencies">Dependencies and Dev Dependencies</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#database-initialisation">Database Initialisation</a>
+      <ul>
+        <li><a href="#seeding">Seeding</a></li>
+        <li><a href="#setting-up-environment-variables">Setting up Environment Variables</a></li>
+         <li><a href="#running-tests">Running Tests</a></li>
+      </ul>
+    </li>
+    <li><a href="#api-endpoints">API Endpoints</a></li>
+    <li><a href="#contributing">Contributing</a></li>
+    <li><a href="#acknowledgements">Acknowledgements</a></li>
+  </ol>
+</details>
+
 ## Installation and Setup
 
 ### Prerequisites
@@ -19,7 +44,7 @@ NC News API is a RESTful API designed to allow the front end to get, post, delet
 - **Node.js** (v14.0 or later)
 - **PostgreSQL** (v12.0 or later)
 
-### Dependencies & DevDependencies
+### Dependencies and Dev Dependencies
 
 Your project relies on several dependencies and devDependencies. You can find detailed information and documentation for each by following the links provided:
 
@@ -60,7 +85,9 @@ Your project relies on several dependencies and devDependencies. You can find de
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-## Database Initialization
+## Database Initialisation
+
+### Seeding
 
 1. **Set up the database with tables and schema**
 
@@ -135,7 +162,7 @@ Don't forget to give the project a star! Thanks again!
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-## Acknowledgments
+## Acknowledgements
 
 Special thanks to Northcoders for their continuous support and guidance during the development of this API.
 (https://northcoders.com/)
